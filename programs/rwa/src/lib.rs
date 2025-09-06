@@ -25,7 +25,7 @@ pub mod vault_receipt {
         let vault = &ctx.accounts.vault;
 
         require!(item_id.as_bytes().len() <= 64, ErrorCode::IdTooLong);
-        
+
         item.item_id = item_id;
         item.custodian = vault.custodian;
         item.depositor = ctx.accounts.depositor.key();
@@ -49,7 +49,7 @@ pub mod vault_receipt {
     pub fn transfer_claim(ctx: Context<TransferClaim>, new_owner: Pubkey) -> Result<()> {
         let item = &mut ctx.accounts.item;
         require!(!item.redeemed, ErrorCode::AlreadyRedeemed);
-        
+
         let old_owner = item.depositor;
         item.depositor = new_owner;
 
@@ -66,7 +66,7 @@ pub mod vault_receipt {
     pub fn redeem_item(ctx: Context<RedeemItem>) -> Result<()> {
         let item = &mut ctx.accounts.item;
         require!(!item.redeemed, ErrorCode::AlreadyRedeemed);
-        
+
         item.redeemed = true;
         item.redeem_ts = Some(Clock::get()?.unix_timestamp);
 
@@ -179,9 +179,9 @@ pub struct RedeemItem<'info> {
 
 #[account]
 pub struct VaultAccount {
-    pub custodian: Pubkey,      // 32 bytes
-    pub vault_name: String,     // 4 + 64 bytes (max)
-    pub bump: u8,               // 1 byte
+    pub custodian: Pubkey,  // 32 bytes
+    pub vault_name: String, // 4 + 64 bytes (max)
+    pub bump: u8,           // 1 byte
 }
 
 impl VaultAccount {
@@ -190,14 +190,14 @@ impl VaultAccount {
 
 #[account]
 pub struct ItemRecord {
-    pub item_id: String,        // 4 + 64 bytes (max)
-    pub custodian: Pubkey,      // 32 bytes
-    pub depositor: Pubkey,      // 32 bytes
-    pub deposit_ts: i64,        // 8 bytes
-    pub redeemed: bool,         // 1 byte
+    pub item_id: String,          // 4 + 64 bytes (max)
+    pub custodian: Pubkey,        // 32 bytes
+    pub depositor: Pubkey,        // 32 bytes
+    pub deposit_ts: i64,          // 8 bytes
+    pub redeemed: bool,           // 1 byte
     pub metadata: Option<String>, // 1 + 4 + 200 bytes (max)
-    pub redeem_ts: Option<i64>, // 1 + 8 bytes
-    pub bump: u8,               // 1 byte
+    pub redeem_ts: Option<i64>,   // 1 + 8 bytes
+    pub bump: u8,                 // 1 byte
 }
 
 impl ItemRecord {
